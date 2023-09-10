@@ -1,4 +1,4 @@
 export interface IRootModel {
-	createdAt: string;
-	updatedAt: string | null;
+  createdAt: string
+  updatedAt: string | null
 }

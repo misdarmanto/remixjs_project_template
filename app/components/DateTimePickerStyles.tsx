@@ -1,23 +1,28 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 interface DateTimePickerProps {
-  title: string;
-  start: any;
-  end: any;
-  save: any;
+  title: string
+  start: any
+  end: any
+  save: any
 }
 
-export default function DateTimePickerStyle({ title, start, end, save }: DateTimePickerProps) {
-  const [showModal, setShowModal] = useState(false);
+export default function DateTimePickerStyle({
+  title,
+  start,
+  end,
+  save
+}: DateTimePickerProps) {
+  const [showModal, setShowModal] = useState(false)
 
   const openModal = () => {
-    setShowModal(!showModal);
-  };
+    setShowModal(!showModal)
+  }
 
   const handleOnSave = () => {
-    save();
-    setShowModal(false);
-  };
+    save()
+    setShowModal(false)
+  }
 
   return (
     <>
@@ -37,7 +42,10 @@ export default function DateTimePickerStyle({ title, start, end, save }: DateTim
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                   <div className="flex items-center justify-between">
-                    <div className="datepicker relative form-floating xl:w-96" data-mdb-toggle-button="false">
+                    <div
+                      className="datepicker relative form-floating xl:w-96"
+                      data-mdb-toggle-button="false"
+                    >
                       <p className="text-center text-gray-500">Start</p>
                       <input
                         type="date"
@@ -46,7 +54,10 @@ export default function DateTimePickerStyle({ title, start, end, save }: DateTim
                         onChange={(e) => start(e.target.value)}
                       />
                     </div>
-                    <div className="datepicker relative form-floating xl:w-96" data-mdb-toggle-button="false">
+                    <div
+                      className="datepicker relative form-floating xl:w-96"
+                      data-mdb-toggle-button="false"
+                    >
                       <p className="text-center text-gray-500">End</p>
                       <input
                         type="date"
@@ -81,5 +92,5 @@ export default function DateTimePickerStyle({ title, start, end, save }: DateTim
         </>
       ) : null}
     </>
-  );
+  )
 }
