@@ -104,11 +104,18 @@ export default function Index(): ReactElement {
     )
   }
 
+  const submitDeleteData = async (e: React.FormEvent<HTMLFormElement>) => {
+    submit(e.currentTarget, { method: 'delete', action: `/admin` })
+    setModalDelete(false)
+  }
+
+  const navigation = [{ title: 'Daftar', href: '', active: true }]
+
   const header: TableHeader[] = [
     {
       title: 'No',
       data: (data: ICrudExampleModel, index: number): ReactElement => (
-        <td key={index + '-no'} className="md:px-6 md:py-3 w-auto mb-4 md:mb-0 ">
+        <td key={index + '-no'} className="md:px-6 md:py-3">
           {index + 1}
         </td>
       )
@@ -117,7 +124,7 @@ export default function Index(): ReactElement {
     {
       title: 'Nama',
       data: (data: ICrudExampleModel, index: number): ReactElement => (
-        <td key={index + 'name'} className="md:px-2 md:py-3">
+        <td key={index + 'name'} className="md:px-6 md:py-3">
           {data.crudExampleName}
         </td>
       )
@@ -125,7 +132,7 @@ export default function Index(): ReactElement {
     {
       title: 'Di buat pada',
       data: (data: ICrudExampleModel, index: number): ReactElement => (
-        <td key={index + 'createdAt'} className="md:px-2 md:py-3">
+        <td key={index + 'createdAt'} className="md:px-6 md:py-3">
           {convertTime(data.createdAt)}
         </td>
       )
@@ -137,7 +144,7 @@ export default function Index(): ReactElement {
       title: 'Aksi',
       action: true,
       data: (data: ICrudExampleModel, index: number): ReactElement => (
-        <td key={index + 'action'} className="md:px-2 md:py-3">
+        <td key={index + 'action'} className="md:px-6 md:py-3">
           {/* Desktop only  */}
           <div className="hidden md:block w-64">
             <button
@@ -218,13 +225,6 @@ export default function Index(): ReactElement {
       )
     })
   }
-
-  const submitDeleteData = async (e: React.FormEvent<HTMLFormElement>) => {
-    submit(e.currentTarget, { method: 'delete', action: `/admin` })
-    setModalDelete(false)
-  }
-
-  const navigation = [{ title: 'Daftar', href: '', active: true }]
 
   return (
     <div className="">

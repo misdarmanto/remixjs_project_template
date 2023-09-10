@@ -105,11 +105,17 @@ export default function Index(): ReactElement {
     )
   }
 
+  const submitDeleteData = async (e: React.FormEvent<HTMLFormElement>) => {
+    submit(e.currentTarget, { method: 'delete', action: `/admin` })
+    setModalDelete(false)
+  }
+  const navigation = [{ title: 'Admin', href: '', active: true }]
+
   const header: TableHeader[] = [
     {
       title: 'No',
       data: (data: IAdminModel, index: number): ReactElement => (
-        <td key={index + '-photo'} className="md:px-6 md:py-3 w-auto mb-4 md:mb-0 ">
+        <td key={index + '-photo'} className="md:px-6 md:py-3">
           {index + 1}
         </td>
       )
@@ -117,7 +123,7 @@ export default function Index(): ReactElement {
     {
       title: 'Nama',
       data: (data: IAdminModel, index: number): ReactElement => (
-        <td key={index + 'adminName'} className="md:px-2 md:py-3">
+        <td key={index + 'adminName'} className="md:px-6 md:py-3">
           {data.adminName}
         </td>
       )
@@ -125,7 +131,7 @@ export default function Index(): ReactElement {
     {
       title: 'E-mail',
       data: (data: IAdminModel, index: number): ReactElement => (
-        <td key={index + 'adminEmail'} className="md:px-2 md:py-3">
+        <td key={index + 'adminEmail'} className="md:px-6 md:py-3">
           {data.adminEmail}
         </td>
       )
@@ -133,7 +139,7 @@ export default function Index(): ReactElement {
     {
       title: 'Role',
       data: (data: IAdminModel, index: number): ReactElement => (
-        <td key={index + 'role'} className="md:px-2 md:py-3">
+        <td key={index + 'role'} className="md:px-6 md:py-3">
           {data.adminRole}
         </td>
       )
@@ -141,7 +147,7 @@ export default function Index(): ReactElement {
     {
       title: 'Di buat pada',
       data: (data: IAdminModel, index: number): ReactElement => (
-        <td key={index + 'createdAt'} className="md:px-2 md:py-3">
+        <td key={index + 'createdAt'} className="md:px-6 md:py-3">
           {convertTime(data.createdAt)}
         </td>
       )
@@ -153,7 +159,7 @@ export default function Index(): ReactElement {
       title: 'Aksi',
       action: true,
       data: (data: IAdminModel, index: number): ReactElement => (
-        <td key={index + 'action'} className="md:px-2 md:py-3">
+        <td key={index + 'action'} className="md:px-6 md:py-3">
           {/* Desktop only  */}
           <div className="hidden md:block w-64">
             <button
@@ -234,12 +240,6 @@ export default function Index(): ReactElement {
       )
     })
   }
-
-  const submitDeleteData = async (e: React.FormEvent<HTMLFormElement>) => {
-    submit(e.currentTarget, { method: 'delete', action: `/admin` })
-    setModalDelete(false)
-  }
-  const navigation = [{ title: 'Admin', href: '', active: true }]
 
   return (
     <div className="">
