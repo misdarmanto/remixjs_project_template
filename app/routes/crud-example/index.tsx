@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import type { ReactElement } from 'react'
 import { useEffect, useState } from 'react'
 import {
@@ -21,6 +22,9 @@ import { Breadcrumb } from '~/components/breadcrumb'
 import { convertTime } from '~/utilities/convertTime'
 import type { ISessionModel } from '~/models/sessionModel'
 import type { ICrudExampleModel } from '~/models/crudExampleModel'
+import moment from 'moment'
+import * as XLSX from 'xlsx'
+import axios from 'axios'
 
 export let loader: LoaderFunction = async ({ params, request }) => {
   const session: any = await checkSession(request)
@@ -110,6 +114,53 @@ export default function Index(): ReactElement {
   }
 
   const navigation = [{ title: 'Daftar', href: '', active: true }]
+
+  const download = async () => {
+    try {
+      const result = await axios.get(
+        `${loader.API.baseUrl}/users/list?pagination=false`,
+        {
+          auth: {
+            username: loader.API.authorization.username,
+            password: loader.API.authorization.password
+          }
+        }
+      )
+
+      let xlsRows: any[] = []
+      await result.data.data.items.map((value: ICrudExampleModel) => {
+        let documentItem = {
+          crudExampleName: value.crudExampleName,
+          createdAt: convertTime(value.createdAt)
+        }
+        xlsRows.push(documentItem)
+      })
+
+      let xlsHeader = ['Crud Nama', 'Tgl Dibuat']
+      let createXLSLFormatObj = []
+      createXLSLFormatObj.push(xlsHeader)
+      xlsRows.map((value: ICrudExampleModel, i): void => {
+        let innerRowData = []
+        innerRowData.push(value.crudExampleName)
+        innerRowData.push(value.createdAt)
+        createXLSLFormatObj.push(innerRowData)
+      })
+
+      /* File Name */
+      let filename = `Data Pengguna ${moment().format('DD-MM-YYYY')}.xlsx`
+
+      /* Sheet Name */
+      let ws_name = 'Sheet1'
+      if (typeof console !== 'undefined') console.log(new Date())
+      let wb = XLSX.utils.book_new(),
+        ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj)
+
+      XLSX.utils.book_append_sheet(wb, ws, ws_name)
+      XLSX.writeFile(wb, filename)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const header: TableHeader[] = [
     {
@@ -266,6 +317,15 @@ export default function Index(): ReactElement {
                 </button>
               </Link>
             )}
+            {session.adminRole === 'superAdmin' && (
+              <button
+                type="button"
+                onClick={download}
+                className="bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-2 px-4 border border-teal-500 hover:border-transparent rounded"
+              >
+                Export
+              </button>
+            )}
           </div>
           <div className="w-full mb-2 md:w-1/5">
             <input
@@ -291,7 +351,7 @@ export default function Index(): ReactElement {
           <input
             className="hidden"
             name="crudExampleId"
-            value={modalData?.crudExampleId}
+            defaultValue={modalData?.crudExampleId}
           />
           Anda yakin akan menghapus <strong>{modalData?.crudExampleName}</strong>
           <div className="flex flex-col md:flex-row mt-4">
