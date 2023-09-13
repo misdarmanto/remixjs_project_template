@@ -73,7 +73,10 @@ export default function Layout({
                 isActive ? { backgroundColor: '#f3f3f3' } : undefined
               }
               to={item.href}
-              onClick={() => setNavigationActive(item.name)}
+              onClick={() => {
+                setNavigationActive(item.name)
+                setSidebarOpen(!sidebarOpen)
+              }}
             >
               <div
                 className={classNames(
@@ -165,12 +168,75 @@ export default function Layout({
     )
   })
 
-  const renderMobileMenu = (
+  const renderMainSection = (
+    <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="relative bg-white shadow-sm z-10 flex-shrink-0 flex h-16">
+        <div className="flex flex-row gap-5 items-center md:hidden ">
+          <button
+            type="button"
+            className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 "
+            onClick={() => setSidebarOpen(true)}
+          >
+            <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
+          </button>
+
+          <h1 className="text-md text-gray-700">
+            <span className="font-extrabold text-2xl text-teal-500">Project App</span>
+          </h1>
+        </div>
+        <div className="flex-1 px-2 flex flex-row-reverse">
+          <div className="ml-4 sm:mr-10 flex items-center">
+            <Menu as="div" className="mx-3 relative">
+              <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <BsPerson className="text-2xl mx-1 text-gray-500 cursor-pointer hover:bg-gray-200 rounded-full" />
+              </Menu.Button>
+
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-2xl shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Form method="post" action="logout">
+                    <button
+                      type="submit"
+                      className="block px-4 py-2 text-sm text-gray-700"
+                    >
+                      Logout
+                    </button>
+                  </Form>
+                  <Link
+                    className="block px-4 py-2 text-sm text-gray-700"
+                    to={'/account/my-profile'}
+                  >
+                    My profile
+                  </Link>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+            <label htmlFor="" className="text-gray-500 font-md">
+              {session?.adminName}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <main className="flex-1 relative overflow-y-auto focus:outline-none bg-slate-100">
+        <div className="px-2 py-2 md:py-6 md:px-6 m-0">{children}</div>
+      </main>
+    </div>
+  )
+
+  const renderSideBarMobileMenu = (
     <Transition.Root show={sidebarOpen} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 flex z-40 md:hidden"
-        onClose={setSidebarOpen}
+        onClose={() => setSidebarOpen(!sidebarOpen)}
       >
         <Transition.Child
           as={Fragment}
@@ -192,29 +258,23 @@ export default function Layout({
           leaveFrom="translate-x-0"
           leaveTo="-translate-x-full"
         >
-          <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-in-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in-out duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="absolute top-0 right-0 -mr-12 pt-2">
+          <div className="relative flex-1 flex flex-col max-w-xs mr-20 w-full pt-5 pb-4 bg-white">
+            <div className="mt-5 flex-1 h-0 overflow-y-auto scrollbar-hide">
+              <div className="flex flex-row justify-between mx-5">
+                <h1 className="text-md text-gray-700">
+                  <span className="font-extrabold text-2xl text-teal-500">
+                    Project App
+                  </span>
+                </h1>
                 <button
                   type="button"
                   className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                   onClick={() => setSidebarOpen(false)}
                 >
                   <span className="sr-only">Close sidebar</span>
-                  <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                  <XIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
                 </button>
               </div>
-            </Transition.Child>
-
-            <div className="mt-5 flex-1 h-0 overflow-y-auto scrollbar-hide">
               <nav className="px-2 space-y-1">{renderListNavigation}</nav>
             </div>
           </div>
@@ -223,7 +283,7 @@ export default function Layout({
     </Transition.Root>
   )
 
-  const renderDesktopMenu = (
+  const renderSideBarDesktopMenu = (
     <div className="h-screen flex overflow-hidden bg-white">
       <div className="hidden bg-white md:flex md:flex-shrink-0">
         <div
@@ -231,77 +291,25 @@ export default function Layout({
         >
           <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
             <h1 className="text-md text-gray-700">
-              <span className="font-extrabold text-2xl text-teal-500 mx-1">
-                Project App
-              </span>
+              <span className="font-extrabold text-2xl text-teal-500">Project App</span>
             </h1>
             <div className="mt-5 flex-1 flex flex-col">
+              {/* <h1 className="font-extrabold text-md text-md text-gray-500 my-3">
+                Main Menu
+              </h1> */}
               <nav className="flex-1 space-y-1">{renderListNavigation}</nav>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <div className="relative bg-white shadow-sm z-10 flex-shrink-0 flex h-16">
-          <button
-            type="button"
-            className="px-4 md:hidden border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 "
-            onClick={() => setSidebarOpen(true)}
-          >
-            <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
-          </button>
-          <div className="flex-1 px-2 flex flex-row-reverse">
-            <div className="ml-4 sm:mr-10 flex items-center">
-              <Menu as="div" className="mx-3 relative">
-                <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  <BsPerson className="text-2xl mx-1 text-gray-500 cursor-pointer hover:bg-gray-200 rounded-full" />
-                </Menu.Button>
-
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-2xl shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Form method="post" action="logout">
-                      <button
-                        type="submit"
-                        className="block px-4 py-2 text-sm text-gray-700"
-                      >
-                        Logout
-                      </button>
-                    </Form>
-                    <Link
-                      className="block px-4 py-2 text-sm text-gray-700"
-                      to={'/account/my-profile'}
-                    >
-                      My profile
-                    </Link>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-              <label htmlFor="" className="text-gray-500 font-md">
-                {session?.adminName}
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <main className="flex-1 relative overflow-y-auto focus:outline-none bg-slate-100">
-          <div className="px-2 py-2 md:py-6 md:px-6 m-0">{children}</div>
-        </main>
-      </div>
+      {renderMainSection}
     </div>
   )
 
   return (
     <>
-      {renderDesktopMenu}
-      {renderMobileMenu}
+      {renderSideBarDesktopMenu}
+      {renderSideBarMobileMenu}
     </>
   )
 }

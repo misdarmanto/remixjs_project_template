@@ -33,9 +33,7 @@ export default function Login({ errors, transition }: ILogin) {
                   <input
                     id="email"
                     name="email"
-                    defaultValue={'admin@lenterailmu.com'}
                     type="email"
-                    autoComplete="email"
                     placeholder="Masukkan email"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                   />
@@ -56,9 +54,7 @@ export default function Login({ errors, transition }: ILogin) {
                   <input
                     id="password"
                     name="password"
-                    defaultValue="12345678"
                     type="password"
-                    autoComplete="current-password"
                     placeholder="Masukkan password"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                   />

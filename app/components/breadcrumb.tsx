@@ -1,13 +1,9 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline'
 import { Link } from '@remix-run/react'
 
 const Breadcrumb = ({ title, navigation }: { title: String; navigation: any[] }) => {
   return (
     <div className="mb-4">
       <div className="flex flex-row">
-        <button className="mr-4">
-          <ArrowLeftIcon width={28} />
-        </button>
         <label className="text-xl font-semibold text-gray-900">{title}</label>
       </div>
       <nav className="flex text-gray-700 rounded-lg" aria-label="Breadcrumb">

@@ -1,5 +1,6 @@
 export const CONFIG = {
   env: process.env.APP_ENV,
+  appName: process.env.APP_NAME ?? 'APP NAME',
   authorization: {
     username: process.env.AUTHORIZATION_USERNAME,
     passsword: process.env.AUTHORIZATION_PASSWORD
