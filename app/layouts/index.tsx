@@ -218,7 +218,7 @@ export default function Layout({
                 </Menu.Items>
               </Transition>
             </Menu>
-            <label htmlFor="" className="text-gray-500 font-md">
+            <label htmlFor="" className="hidden md:block text-gray-500 font-md">
               {session?.adminName}
             </label>
           </div>
